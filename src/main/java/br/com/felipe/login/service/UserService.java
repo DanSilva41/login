@@ -1,9 +1,8 @@
 package br.com.felipe.login.service;
 
-import com.thesolution.structure.backend.commons.datatransfers.dto.UserDTO;
-import com.thesolution.structure.backend.commons.datatransfers.vm.user.CreateUserVM;
-import com.thesolution.structure.backend.commons.datatransfers.vm.user.UpdateUserVM;
-import org.springframework.transaction.annotation.Transactional;
+import br.com.felipe.login.web.rest.dto.UserDTO;
+import br.com.felipe.login.web.rest.vm.user.CreateUserVM;
+import br.com.felipe.login.web.rest.vm.user.UpdateUserVM;
 
 import javax.validation.Valid;
 import java.util.Collection;

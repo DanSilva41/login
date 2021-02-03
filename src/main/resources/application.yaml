@@ -1,0 +1,98 @@
+server:
+    port: ${PORT:8091}
+    use-forward-headers: true
+    servlet.context-path: /api/thesolution
+
+security:
+    oauth2:
+        client.client-id: client-password
+        resource.jwt.keyValue: ${jwt.public-keys.dev}
+
+management:
+    endpoints:
+        web:
+            base-path: "/"
+        enabled-by-default: false
+    endpoint:
+        health:
+            enabled: true
+        info:
+            enabled: true
+health.config.enabled: false
+
+logging:
+    level:
+        root: INFO
+        liquibase: INFO
+        org.springframework.orm.jpa: ERROR
+        org.springframework.transaction: ERROR
+        org.hibernate.engine.jdbc.spi.SqlExceptionHelper: ERROR
+        org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+---
+spring:
+    profiles: default, exp
+    profiles.include:
+        - public-jwt
+security:
+    oauth2.resource.jwt.keyValue: ${jwt.public-keys.dev}
+app:
+    tipo-ambiente: DEFAULT
+
+---
+spring:
+    profiles: dev
+    profiles.include:
+        - public-jwt
+security:
+    oauth2.resource.jwt.keyValue: ${jwt.public-keys.dev}
+app:
+    tipo-ambiente: DEVELOPMENT
+
+management:
+    endpoint:
+        actuator.enabled: true
+        env.enabled: true
+        metrics:
+            enabled: true
+        heapdump:
+            enabled: true
+        httptrace:
+            enabled: true
+        auditevents:
+            enabled: true
+        beans:
+            enabled: true
+        prometheus:
+            enabled: true
+    endpoints:
+        web.exposure.include: "actuator, health, info, env, metrics, heapdump, beans, httptrace, auditevents, prometheus"
+---
+spring:
+    profiles: test
+    profiles.include:
+        - public-jwt
+app:
+    tipo-ambiente: TEST
+
+logging.level.root: DEBUG
+
+---
+spring:
+    profiles: qa
+    profiles.include:
+        - public-jwt
+security:
+    oauth2.resource.jwt.keyValue: ${jwt.public-keys.qa}
+app:
+    tipo-ambiente: QUALITY
+
+---
+spring:
+    profiles: prod
+    profiles.include:
+        - public-jwt
+security:
+    oauth2.resource.jwt.keyValue: ${jwt.public-keys.prod}
+app:
+    tipo-ambiente: PRODUCTION

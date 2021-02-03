@@ -1,0 +1,56 @@
+databaseChangeLog:
+    -   changeSet:
+            id: insert_data_persons
+            author: danilosilvap
+            changes:
+                -   loadData:
+                        schemaName: backing
+                        tableName: person
+                        file: liquibase/data/persons.csv
+                        encoding: UTF-8
+                        separator: ;
+                        identityInsertEnabled: true
+    - changeSet:
+          id: insert_data_users
+          author: danilosilvap
+          changes:
+              - loadData:
+                    schemaName: security
+                    tableName: user
+                    file: liquibase/data/users.csv
+                    encoding: UTF-8
+                    separator: ;
+                    identityInsertEnabled: true
+    -   changeSet:
+            id: insert_data_applications
+            author: danilosilvap
+            changes:
+                -   loadData:
+                        schemaName: security
+                        tableName: application
+                        file: liquibase/data/applications.csv
+                        encoding: UTF-8
+                        separator: ;
+                        identityInsertEnabled: true
+    -   changeSet:
+            id: insert_data_authorities
+            author: danilosilvap
+            changes:
+                -   loadData:
+                        schemaName: security
+                        tableName: authority
+                        file: liquibase/data/authorities.csv
+                        encoding: UTF-8
+                        separator: ;
+                        identityInsertEnabled: true
+    -   changeSet:
+            id: insert_data_authorities_users_applications
+            author: danilosilvap
+            changes:
+                -   loadData:
+                        schemaName: security
+                        tableName: authority_user_application
+                        file: liquibase/data/authorities_users_applications.csv
+                        encoding: UTF-8
+                        separator: ;
+                        identityInsertEnabled: true

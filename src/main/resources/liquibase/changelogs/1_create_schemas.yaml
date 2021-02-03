@@ -1,0 +1,13 @@
+databaseChangeLog:
+    -   changeSet:
+            id: create_schema_security
+            author: danilosilvap
+            changes:
+                -   sql:
+                        comment: Creation of security and backing schemes
+                        dbms: 'postgresql'
+                        sql: CREATE SCHEMA IF NOT EXISTS backing AUTHORIZATION postgres; CREATE SCHEMA IF NOT EXISTS security AUTHORIZATION postgres;
+                -   sql:
+                        comment: Creation of security and backing schemes
+                        dbms: 'h2'
+                        sql: CREATE SCHEMA IF NOT EXISTS backing; CREATE SCHEMA IF NOT EXISTS security;

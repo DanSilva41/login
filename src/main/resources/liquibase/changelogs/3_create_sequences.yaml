@@ -1,0 +1,46 @@
+databaseChangeLog:
+    -   changeSet:
+            id: create_sequence_person_code_seq
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        sequenceExists:
+                            schemaName: backing
+                            sequenceName: person_code_seq
+            changes:
+                -   createSequence:
+                        schemaName: backing
+                        sequenceName: person_code_seq
+                        incrementBy: 1
+                        startValue: 3
+    -   changeSet:
+            id: create_sequence_user_code_seq
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        sequenceExists:
+                            schemaName: security
+                            sequenceName: user_code_seq
+            changes:
+                -   createSequence:
+                        schemaName: security
+                        sequenceName: user_code_seq
+                        incrementBy: 1
+                        startValue: 3
+    -   changeSet:
+            id: create_sequence_application_code_seq
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        sequenceExists:
+                            schemaName: security
+                            sequenceName: application_code_seq
+            changes:
+                -   createSequence:
+                        schemaName: security
+                        sequenceName: application_code_seq
+                        incrementBy: 1
+                        startValue: 3

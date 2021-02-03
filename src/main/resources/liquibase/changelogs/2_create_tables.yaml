@@ -1,0 +1,381 @@
+databaseChangeLog:
+    -   property:
+            name: now
+            value: now()
+            dbms: 'postgresql, h2'
+
+    -   changeSet:
+            id: create_table_person
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: backing
+                            tableName: person
+            changes:
+                -   createTable:
+                        schemaName: backing
+                        tableName: person
+                        columns:
+                            -   column:
+                                    name: code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_person_code
+                            -   column:
+                                    name: first_name
+                                    type: varchar(60)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_name
+                                    type: varchar(60)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: email
+                                    type: varchar(100)
+                                    constraints:
+                                        nullable: false
+                                        unique: true
+                            # Auditing
+                            -   column:
+                                    name: created_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        updatable: false
+                            -   column:
+                                    name: created_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                -   roolback:
+                        -   dropTable:
+                                -   schemaName: backing
+                                -   tableName: person
+    -   changeSet:
+            id: create_table_user
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: security
+                            tableName: user
+            changes:
+                -   createTable:
+                        schemaName: security
+                        tableName: user
+                        columns:
+                            -   column:
+                                    name: code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_user_code
+                            -   column:
+                                    name: username
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        unique: true
+                            -   column:
+                                    name: password
+                                    type: varchar(60)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: actived
+                                    type: boolean
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: person_code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                            # Auditing
+                            -   column:
+                                    name: created_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        updatable: false
+                            -   column:
+                                    name: created_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                -   roolback:
+                        -   dropTable:
+                                -   schemaName: security
+                                -   tableName: user
+    -   changeSet:
+            id: create_table_application
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: security
+                            tableName: application
+            changes:
+                -   createTable:
+                        schemaName: security
+                        tableName: application
+                        columns:
+                            -   column:
+                                    name: code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_application_code
+                            -   column:
+                                    name: name
+                                    type: varchar(60)
+                                    constraints:
+                                        nullable: false
+                                        unique: true
+                            -   column:
+                                    name: description
+                                    type: varchar(150)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: actived
+                                    type: boolean
+                                    constraints:
+                                        nullable: false
+                            # Auditing
+                            -   column:
+                                    name: created_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        updatable: false
+                            -   column:
+                                    name: created_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                -   roolback:
+                        -   dropTable:
+                                -   schemaName: security
+                                -   tableName: application
+    -   changeSet:
+            id: create_table_authority
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: security
+                            tableName: authority
+            changes:
+                -   createTable:
+                        schemaName: security
+                        tableName: authority
+                        columns:
+                            -   column:
+                                    name: name
+                                    type: varchar(50)
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_authority_name
+                            -   column:
+                                    name: description
+                                    type: varchar(150)
+                                    constraints:
+                                        nullable: false
+                            # Auditing
+                            -   column:
+                                    name: created_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        updatable: false
+                            -   column:
+                                    name: created_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                -   roolback:
+                        -   dropTable:
+                                -   schemaName: security
+                                -   tableName: authority
+    -   changeSet:
+            id: create_table_authority_user_application
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: security
+                            tableName: authority_user_application
+            changes:
+                -   createTable:
+                        schemaName: security
+                        tableName: authority_user_application
+                        columns:
+                            -   column:
+                                    name: authority_name
+                                    type: varchar(50)
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_authority_name_authority_user_application
+                            -   column:
+                                    name: user_code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_user_code_authority_user_application
+                            -   column:
+                                    name: application_code
+                                    type: int
+                                    constraints:
+                                        nullable: false
+                                        primaryKey: true
+                                        primaryKeyName: pk_application_code_authority_user_application
+                            # Auditing
+                            -   column:
+                                    name: created_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                                        updatable: false
+                            -   column:
+                                    name: created_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_by
+                                    type: varchar(20)
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: last_modified_date
+                                    type: datetime
+                                    defaultValueDate: ${now}
+                                    constraints:
+                                        nullable: false
+                -   roolback:
+                        -   dropTable:
+                                -   schemaName: security
+                                -   tableName: authority_user_application
+    -   changeSet:
+            id: create_authority_relationship_for_authority_user_application
+            author: danilosilvap
+            preConditions:
+                -   onFail: MARK_RAN
+                -   not:
+                        tableExists:
+                            schemaName: security
+                            tableName: user
+            changes:
+                # Foreign key in security.authority_user_application from security.authority
+                -   addForeignKeyConstraint:
+                        constraintName: fk_authority_name_authority_user_application
+                        baseTableSchemaName: security
+                        baseTableName: authority_user_application
+                        baseColumnNames: authority_name
+                        referencedTableSchemaName: security
+                        referencedTableName: authority
+                        referencedColumnNames: name
+    -   changeSet:
+            id: create_user_relationship_for_authority_user_application
+            author: danilosilvap
+            changes:
+                # Foreign key in security.authority_user_application from security.user
+                -   addForeignKeyConstraint:
+                        constraintName: fk_user_code_authority_user_application
+                        baseTableSchemaName: security
+                        baseTableName: authority_user_application
+                        baseColumnNames: user_code
+                        referencedTableSchemaName: security
+                        referencedTableName: user
+                        referencedColumnNames: code
+    -   changeSet:
+            id: create_application_relationship_for_authority_user_application
+            author: danilosilvap
+            changes:
+                # Foreign key in security.authority_user_application from security.application
+                -   addForeignKeyConstraint:
+                        constraintName: fk_application_code_authority_user_application
+                        baseTableSchemaName: security
+                        baseTableName: authority_user_application
+                        baseColumnNames: application_code
+                        referencedTableSchemaName: security
+                        referencedTableName: application
+                        referencedColumnNames: code
+    -   changeSet:
+            id: create_person_relationship_for_user
+            author: danilosilvap
+            changes:
+                # Foreign key in security.user from backing.person
+                -   addForeignKeyConstraint:
+                        constraintName: fk_person_code_user
+                        baseTableSchemaName: security
+                        baseTableName: user
+                        baseColumnNames: person_code
+                        referencedTableSchemaName: backing
+                        referencedTableName: person
+                        referencedColumnNames: code

@@ -1,0 +1,75 @@
+package br.com.felipe.login.domain;
+
+import com.thesolution.structure.backend.common.abstracts.entity.AbstractAuditingEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@DynamicUpdate
+@Entity(name = "backing.Person")
+@Table(schema = "backing", name = "person")
+public class Person extends AbstractAuditingEntity implements Serializable {
+
+    @Id
+    @SequenceGenerator(schema = "backing", name = "person_code_seq", sequenceName = "person_code_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_code_seq")
+    @Column(name = "code", unique = true, nullable = false)
+    private Integer code;
+
+    @NotBlank
+    @Size(min = 2, max = 60)
+    @Column(name = "first_name", length = 60, nullable = false)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 2, max = 60)
+    @Column(name = "last_name", length = 60, nullable = false)
+    private String lastName;
+
+    @Email
+    @NotBlank
+    @Size(min = 5, max = 100)
+    @Column(name = "email", length = 150, unique = true, nullable = false)
+    private String email;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}

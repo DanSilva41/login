@@ -1,0 +1,117 @@
+spring:
+    application:
+        name: login-service
+    cloud:
+        config.enabled: false
+        discovery.enabled: false
+        service-registry.auto-registration.enabled: false
+    jpa:
+        show-sql: { SHOW_SQL:false }
+        hibernate.naming:
+            implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+            physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        properties.hibernate:
+            temp.use_jdbc_metadata_defaults: false
+            jdbc.lob.non_contextual_creation: true
+    liquibase:
+        change-log: classpath:/liquibase/changelog-master.yaml
+    jackson:
+        date-format: yyyy-MM-dd
+        deserialization.fail-on-unknown-properties: true
+    messages:
+        basename: classpath:/i18n/messages
+
+app:
+    security:
+        permit-requests:
+            matchers-all:
+            matchers-get:
+            framework:
+                matchers-all:
+                    - /token/**
+                matchers-get:
+                    - /actuator
+                    - /env
+                    - /metrics
+                    - /heapdump
+                    - /beans
+                    - /httptrace
+                    - /auditevents
+                    - /prometheus
+                    - /health
+                    - /info
+                    - /swagger-ui.html
+                    - /v2/**
+                    - /webjars/**
+                    - /swagger-resources/**
+            business:
+                matchers-all:
+                matchers-get:
+
+datasource:
+    primary:
+        server: localhost
+        port: 5432
+        database: common
+
+---
+spring:
+    profiles: default, exp
+    profiles.include:
+        - postgres
+
+---
+spring:
+    profiles: dev
+    profiles.include:
+        - postgres
+
+---
+spring:
+    profiles: test
+    profiles.include:
+        - mem-h2
+
+---
+spring:
+    profiles: qa
+    profiles.include:
+        - postgres
+
+app.security:
+    permit-requests:
+        matchers-all:
+        framework:
+            matchers-get:
+                - /health
+                - /info
+---
+spring:
+    profiles: prod
+    profiles.include:
+        - postgres
+
+
+app.security:
+    permit-requests:
+        matchers-all:
+        framework:
+            matchers-get:
+                - /health
+                - /info
+
+---
+
+spring:
+    profiles: config-server
+    cloud.config:
+        enabled: true
+        uri: ${SPRING_CONFIG_URI:http://localhost:8888}
+
+logging:
+    config: ${spring.cloud.config.uri}/*/default/*/logback-spring.xml
+
+---
+spring:
+    profiles: docker
+    cloud.config.uri: ${SPRING_CONFIG_URI:http://config-server}
